@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<retrocfg>
+  <config core="fceumm_libretro.so" extension=".nes" gamelistfolder="./gamelists/nes" targetfolderid="110">nes</config>
+  <config core="snes9x_libretro.so" extension=".smc" gamelistfolder="./gamelists/snes" targetfolderid="110">snes</config>
+  <config core="gambatte_libretro.so" extension=".gb" gamelistfolder="./gamelists/gb" targetfolderid="110">gb</config>
+  <config core="gambatte_libretro.so" extension=".gbc" gamelistfolder="./gamelists/gbc" targetfolderid="110">gbc</config>
+  <config core="mgba_libretro.so" extension=".gba" gamelistfolder="./gamelists/gba" targetfolderid="110">gba</config>
+  <config core="genesis_plus_gx_libretro.so" extension=".sms" gamelistfolder="./gamelists/mastersystem" targetfolderid="110">sms</config>
+  <config core="genesis_plus_gx_libretro.so" extension=".gen" gamelistfolder="./gamelists/megadrive" targetfolderid="110">smd</config>
+  <config core="genesis_plus_gx_libretro.so" extension=".32x" gamelistfolder="./gamelists/sega32x" targetfolderid="110">32x</config>
+  <config core="reicast_libretro.so" extension=".cdi" gamelistfolder="./gamelists/dreamcast" targetfolderid="110">sdc</config>
+  <config core="ppsspp_libretro.so" extension=".iso" gamelistfolder="./gamelists/psp" targetfolderid="110">psp</config>
+  <config core="drastic" extension=".nds" gamelistfolder="./gamelists/nds" targetfolderid="110">nds</config>
+</retrocfg>

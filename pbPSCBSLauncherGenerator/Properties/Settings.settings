@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="pbPSCBSLauncherGenerator.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="sRomFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">H:\Roms</Value>
+    </Setting>
+    <Setting Name="sNameForFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">defaultName</Value>
+    </Setting>
+    <Setting Name="sPublisherForFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PB</Value>
+    </Setting>
+    <Setting Name="iYearForFolder" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2019</Value>
+    </Setting>
+    <Setting Name="sDbFileForFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">regional.db</Value>
+    </Setting>
+    <Setting Name="iFolderIdForFolder" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">111</Value>
+    </Setting>
+    <Setting Name="iParentIdForFolder" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
