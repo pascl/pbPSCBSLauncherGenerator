@@ -289,6 +289,7 @@ namespace pbPSCBSLauncherGenerator
                     cbDriveList.SelectedIndex = iSelected;
                 }
                 else
+                if(cbDriveList.Items.Count > 0)
                 {
                     cbDriveList.SelectedIndex = 0;
                 }
@@ -715,7 +716,7 @@ namespace pbPSCBSLauncherGenerator
                                 }
                                 if (m_coreType == CoreType.RetroArchType)
                                 {
-                                    sw.Write("pb_core=\"/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "\"" + "\n");
+                                    sw.Write("pb_core=\"/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text + "\"" + "\n");
                                 }
                                 sw.Write("pb_rom=\"/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\"" + "\n");
                                 sw.Write("pb_parentfolder=\"" + nudParentFolderIdForScan.Value.ToString() + "\"" + "\n");
@@ -999,7 +1000,7 @@ namespace pbPSCBSLauncherGenerator
                     {
                         sw.Write("#!/bin/sh" + "\n");
                         sw.Write("source \"/var/volatile/launchtmp/launcher.cfg\"" + "\n");
-                        sw.Write("echo - e \"pb_currentdbfile =\\\"$pb_dbfile\\\"\\npb_currentidfolder=$pb_idfolder\" > \"/var/volatile/pb_folder.flag\"" + "\n");
+                        sw.Write("echo -e \"pb_currentdbfile=\\\"$pb_dbfile\\\"\\npb_currentidfolder=$pb_idfolder\" > \"/var/volatile/pb_folder.flag\"" + "\n");
                     }
                     using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launcher.cfg"))
                     {

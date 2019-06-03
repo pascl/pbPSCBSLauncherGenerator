@@ -4,7 +4,7 @@ A little software to use with *PSC*lassic and modded *B*leem*S*ync1.1 which can 
 
 Download Link: https://github.com/pascl/pbPSCBSLauncherGenerator/releases
 
-Last version: 0.3
+Last version: 0.31
 
 ![Preview](https://i.imgur.com/ImZaOce.png)
 
@@ -45,6 +45,7 @@ https://www.youtube.com/watch?v=LEKqin5gYuA
 ## File list in release pack
 * pbPSCBSLauncherGenerator.exe
 * retroarch_params.xml
+* README.md
 * pngquant/COPYRIGHT - file from pngquant pack
 * pngquant/pngquant.exe - file from pngquant pack
 * pngquant/readme.txt - file from pngquant pack
