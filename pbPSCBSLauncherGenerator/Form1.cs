@@ -168,14 +168,7 @@ namespace pbPSCBSLauncherGenerator
             this.Text = "pbPSCBSLauncherGenerator v" + Assembly.GetExecutingAssembly().GetName().Version;
             m_coreType = CoreType.RetroArchType;
             List<ClQuickSettings> lsqs = new List<ClQuickSettings>();
-            pbImgForFolder.AllowDrop = true;
-
-            nudFolderIdForFolder.Value = (decimal)(Properties.Settings.Default.iFolderIdForFolder);
-            nudParentIdForFolder.Value = (decimal)(Properties.Settings.Default.iParentIdForFolder);
-            nudYearForFolder.Value = (decimal)(Properties.Settings.Default.iYearForFolder);
-            tbDBFileForFolder.Text = Properties.Settings.Default.sDbFileForFolder.Trim();
-            tbNameForFolder.Text = Properties.Settings.Default.sNameForFolder.Trim();
-            tbPublisherForFolder.Text = Properties.Settings.Default.sPublisherForFolder.Trim();
+            
             tbRomsDir.Text = Properties.Settings.Default.sRomFolder.Trim();
 
             try
@@ -209,18 +202,6 @@ namespace pbPSCBSLauncherGenerator
                                         else if ("gamelistfolder" == xmlreader.Name)
                                         {
                                             mygamelistfolder = xmlreader.Value;
-                                        }
-                                        else if ("targetfolderid" == xmlreader.Name)
-                                        {
-                                            try
-                                            {
-                                                mytargetfolderid = int.Parse(xmlreader.Value);
-                                            }
-                                            catch(Exception ex)
-                                            {
-                                                mytargetfolderid = -1;
-                                            }
-                                            
                                         }
                                     }
                                 }
@@ -272,7 +253,7 @@ namespace pbPSCBSLauncherGenerator
                 foreach (String s in sDrives)
                 {
                     DriveInfo di = new DriveInfo(s);
-                    if (di.DriveType == DriveType.Removable)
+                    //if (di.DriveType == DriveType.Removable)
                     {
                         String sCompleteDrive = di.ToString();
                         // di.VolumeLabel + " (" + s + ") " + ClPbHelper.FormatBytes(di.AvailableFreeSpace) + " free/" + ClPbHelper.FormatBytes(di.TotalSize);
@@ -302,389 +283,401 @@ namespace pbPSCBSLauncherGenerator
             {
                 String sDir = tbRomsDir.Text;
                 String sDirLauncher = tbLauncherDir.Text;
+                String sDirGames = tbGamesDir.Text;
                 String sGlFolder = String.Empty;
-                if ((Directory.Exists(sDir)) && (Directory.Exists(sDirLauncher)))
+                int iGameIndex = 1;
+                if ((Directory.Exists(sDir)) && (Directory.Exists(sDirGames)))
                 {
-                    FileInfo[] inDirfileList = new DirectoryInfo(sDir).GetFiles("*" + tbExtension.Text.Trim(), SearchOption.AllDirectories);
-                    int index = 0;
-
-                    List<String> lsGames = new List<string>();
-                    List<ClAnyGame> lsGamesInfo = new List<ClAnyGame>();
-                    try
+                    String sExtensions = tbExtension.Text.Trim();
+                    String[] sExtArray = sExtensions.Split(',');
+                    foreach (String sExt in sExtArray)
                     {
-                        String sFileGamelist;
-                        sGlFolder = tbGlFolder.Text.Replace("/", "\\");
-                        if(sGlFolder.EndsWith("\\"))
-                        {
-                            sGlFolder = sGlFolder.Substring(0, sGlFolder.LastIndexOf("\\"));
-                        }
-                        if (sGlFolder.StartsWith(".\\"))
-                        {
-                            sFileGamelist = Application.StartupPath + sGlFolder.Substring(1) + "\\" + "gamelist.xml";
-                        }
-                        else
-                        {
-                            sFileGamelist = sGlFolder + "\\" + "gamelist.xml";
-                        }
-                        if (File.Exists(sFileGamelist))
-                        {
-                            using (XmlTextReader xmlreader = new XmlTextReader(sFileGamelist))
-                            {
-                                String myName = String.Empty;
-                                String myDate = "1602";
-                                String myPublisher = String.Empty;
-                                String myImage = String.Empty;
-                                bool bReadName = false;
-                                bool bReadDate = false;
-                                bool bReadPublisher = false;
-                                bool bReadImage = false;
-                                int iParamsFound = 0;
-                                while (xmlreader.Read())
-                                {
-                                    switch (xmlreader.NodeType)
-                                    {
-                                        case XmlNodeType.Element:
-                                            if ("name" == xmlreader.Name)
-                                            {
-                                                if (myName != String.Empty)
-                                                {
-                                                    iParamsFound = 0;
-                                                    lsGames.Add(myName);
-                                                    lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
-                                                    myName = String.Empty;
-                                                    myDate = "1602";
-                                                    myPublisher = String.Empty;
-                                                    myImage = String.Empty;
-                                                }
-                                                bReadName = true;
-                                            }
-                                            if ("releasedate" == xmlreader.Name)
-                                            {
-                                                if (myDate != "1602")
-                                                {
-                                                    iParamsFound = 0;
-                                                    lsGames.Add(myName);
-                                                    lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
-                                                    myName = String.Empty;
-                                                    myDate = "1602";
-                                                    myPublisher = String.Empty;
-                                                    myImage = String.Empty;
-                                                }
-                                                bReadDate = true;
-                                            }
-                                            if ("publisher" == xmlreader.Name)
-                                            {
-                                                if (myPublisher != String.Empty)
-                                                {
-                                                    iParamsFound = 0;
-                                                    lsGames.Add(myName);
-                                                    lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
-                                                    myName = String.Empty;
-                                                    myDate = "1602";
-                                                    myPublisher = String.Empty;
-                                                    myImage = String.Empty;
-                                                }
-                                                bReadPublisher = true;
-                                            }
-                                            if ("image" == xmlreader.Name)
-                                            {
-                                                if (myImage != String.Empty)
-                                                {
-                                                    iParamsFound = 0;
-                                                    lsGames.Add(myName);
-                                                    lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
-                                                    myName = String.Empty;
-                                                    myDate = "1602";
-                                                    myPublisher = String.Empty;
-                                                    myImage = String.Empty;
-                                                }
-                                                bReadImage = true;
-                                            }
-                                            break;
-                                        case XmlNodeType.Text:
-                                            // Console.WriteLine(xmlreader.Value);
-                                            if (bReadName)
-                                            {
-                                                myName = xmlreader.Value.Trim();
-                                                bReadName = false;
-                                                iParamsFound++;
-                                            }
-                                            if (bReadDate)
-                                            {
-                                                myDate = xmlreader.Value.Trim();
-                                                bReadDate = false;
-                                                iParamsFound++;
-                                            }
-                                            if (bReadPublisher)
-                                            {
-                                                myPublisher = xmlreader.Value.Trim();
-                                                bReadPublisher = false;
-                                                iParamsFound++;
-                                            }
-                                            if (bReadImage)
-                                            {
-                                                myImage = xmlreader.Value.Trim();
-                                                bReadImage = false;
-                                                iParamsFound++;
-                                            }
-                                            if (4 == iParamsFound)
-                                            {
-                                                iParamsFound = 0;
-                                                lsGames.Add(myName);
-                                                lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
-                                                myName = String.Empty;
-                                                myDate = "1602";
-                                                myPublisher = String.Empty;
-                                                myImage = String.Empty;
-                                            }
-                                            break;
-                                        case XmlNodeType.EndElement:
-                                            //
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //
-                    }
-                    int romfound = 0;
-                    int romnotfound = 0;
-                    String sList = String.Empty;
+                        FileInfo[] inDirfileList = new DirectoryInfo(sDir).GetFiles("*" + sExt.Trim(), SearchOption.AllDirectories);
+                        int index = 0;
 
-                    DriveInfo di = (DriveInfo)cbDriveList.SelectedItem;
-                    String sRootDir = di.Name;
-
-                    foreach (FileInfo fi in inDirfileList)
-                    {
-                        if (fi.Extension == tbExtension.Text.Trim())
+                        List<String> lsGames = new List<string>();
+                        List<ClAnyGame> lsGamesInfo = new List<ClAnyGame>();
+                        try
                         {
-                            int iN = 1;
-                            int len = fi.Name.LastIndexOf(fi.Extension);
-                            if (fi.Name.IndexOf("(") > -1)
+                            String sFileGamelist;
+                            sGlFolder = tbGlFolder.Text.Replace("/", "\\");
+                            if (sGlFolder.EndsWith("\\"))
                             {
-                                len = fi.Name.IndexOf("(");
+                                sGlFolder = sGlFolder.Substring(0, sGlFolder.LastIndexOf("\\"));
                             }
-                            if ((fi.Name.IndexOf("[") > -1) && (fi.Name.IndexOf("[") < len))
+                            if (sGlFolder.StartsWith(".\\"))
                             {
-                                len = fi.Name.IndexOf("[");
-                            }
-                            String sNameFull = fi.Name.Substring(0, len).Replace("_", " ");
-                            if (sNameFull.Length > 1)
-                            {
-                                sNameFull = sNameFull.Substring(0, 1).ToUpper() + sNameFull.Substring(1);
-                            }
-                            sNameFull = sNameFull.Trim();
-                            String sName = Regex.Replace(sNameFull, @"[^0-9a-zA-Z ]+", "");
-                            sName = Regex.Replace(sName, @" +", " ");
-                            sName = sName.Trim();
-                            String sNewDir = tbTag.Text + "_" + sName;
-                            if (Directory.Exists(sDirLauncher + "\\" + sNewDir))
-                            {
-                                while (Directory.Exists(sDirLauncher + "\\" + sNewDir + "_" + iN.ToString()))
-                                {
-                                    iN++;
-                                }
-                                sNewDir = sDirLauncher + "\\" + sNewDir + "_" + iN.ToString();
+                                sFileGamelist = Application.StartupPath + sGlFolder.Substring(1) + "\\" + "gamelist.xml";
                             }
                             else
                             {
-                                sNewDir = sDirLauncher + "\\" + sNewDir;
+                                sFileGamelist = sGlFolder + "\\" + "gamelist.xml";
                             }
-                            bool bDefImage = false;
-                            int toto = -1;
-                            int indexlist = 0;
-                            List<ClPaireIndexString> lsPairIndexName = new List<ClPaireIndexString>();
-                            foreach (String s in lsGames)
+                            if (File.Exists(sFileGamelist))
                             {
-                                toto = s.ToLower().IndexOf(sNameFull.ToLower());
-                                if (toto > -1)
+                                using (XmlTextReader xmlreader = new XmlTextReader(sFileGamelist))
                                 {
-                                    lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
-                                }
-                                indexlist++;
-                            }
-                            if (lsPairIndexName.Count > 0)
-                            {
-                                toto = 0;
-                                indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
-                                if (lsPairIndexName.Count > 1)
-                                {
-                                    // here make a choice
-                                    foreach (ClPaireIndexString cpis in lsPairIndexName)
+                                    String myName = String.Empty;
+                                    String myDate = "1602";
+                                    String myPublisher = String.Empty;
+                                    String myImage = String.Empty;
+                                    bool bReadName = false;
+                                    bool bReadDate = false;
+                                    bool bReadPublisher = false;
+                                    bool bReadImage = false;
+                                    int iParamsFound = 0;
+                                    while (xmlreader.Read())
                                     {
-                                        //tbLog.AppendText(cpis.Name + " for " + sNameFull + Environment.NewLine);
-                                        String sNewName = cpis.Name;
-                                        int iLen = -1;
-                                        if (sNewName.IndexOf("(") > -1)
+                                        switch (xmlreader.NodeType)
                                         {
-                                            iLen = fi.Name.IndexOf("(");
-                                        }
-                                        if ((sNewName.IndexOf("[") > -1) && (sNewName.IndexOf("[") < iLen))
-                                        {
-                                            iLen = sNewName.IndexOf("[");
-                                        }
-                                        if (iLen > -1)
-                                        {
-                                            sNewName = sNewName.Substring(0, iLen);
-                                        }
-                                        if (sNewName == sNameFull)
-                                        {
-                                            indexlist = cpis.Index;
-                                            // instead of the first, pick the first found with the same name, which is supposedly more accurate
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // nothing found, search again
-                                int toto2 = -1;
-                                String sNameFullModded = Regex.Replace(sNameFull, @"[^0-9a-zA-Z ]+", " ");
-                                sNameFullModded = Regex.Replace(sNameFullModded, @" +", " ").Trim();
-                                String[] saTokensName = sNameFullModded.Split(' ');
-                                Dictionary<String, int> dcMatchingNumber = new Dictionary<String, int>();
-                                int iMaxMatch = 0;
-                                foreach (String s in saTokensName)
-                                {
-                                    String sTrimmed = s.Trim();
-                                    if (sTrimmed.Length > 0)
-                                    {
-                                        if (sTrimmed.Length == 1)
-                                        {
-                                            if (sNameFullModded.StartsWith(s + " "))
-                                            {
-                                                sTrimmed = sTrimmed + " ";
-                                            }
-                                            else
-                                            if (sNameFullModded.EndsWith(" " + s))
-                                            {
-                                                sTrimmed = " " + sTrimmed;
-                                            }
-                                        }
-                                        foreach (String ss in lsGames)
-                                        {
-                                            toto2 = ss.ToLower().IndexOf(sTrimmed.ToLower());
-                                            if (toto2 > -1)
-                                            {
-                                                if (!dcMatchingNumber.ContainsKey(ss))
+                                            case XmlNodeType.Element:
+                                                if ("name" == xmlreader.Name)
                                                 {
-                                                    dcMatchingNumber.Add(ss, 1);
-                                                    if (iMaxMatch < 1)
+                                                    if (myName != String.Empty)
                                                     {
-                                                        iMaxMatch = 1;
+                                                        iParamsFound = 0;
+                                                        lsGames.Add(myName);
+                                                        lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
+                                                        myName = String.Empty;
+                                                        myDate = "1602";
+                                                        myPublisher = String.Empty;
+                                                        myImage = String.Empty;
                                                     }
+                                                    bReadName = true;
+                                                }
+                                                if ("releasedate" == xmlreader.Name)
+                                                {
+                                                    if (myDate != "1602")
+                                                    {
+                                                        iParamsFound = 0;
+                                                        lsGames.Add(myName);
+                                                        lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
+                                                        myName = String.Empty;
+                                                        myDate = "1602";
+                                                        myPublisher = String.Empty;
+                                                        myImage = String.Empty;
+                                                    }
+                                                    bReadDate = true;
+                                                }
+                                                if ("publisher" == xmlreader.Name)
+                                                {
+                                                    if (myPublisher != String.Empty)
+                                                    {
+                                                        iParamsFound = 0;
+                                                        lsGames.Add(myName);
+                                                        lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
+                                                        myName = String.Empty;
+                                                        myDate = "1602";
+                                                        myPublisher = String.Empty;
+                                                        myImage = String.Empty;
+                                                    }
+                                                    bReadPublisher = true;
+                                                }
+                                                if ("image" == xmlreader.Name)
+                                                {
+                                                    if (myImage != String.Empty)
+                                                    {
+                                                        iParamsFound = 0;
+                                                        lsGames.Add(myName);
+                                                        lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
+                                                        myName = String.Empty;
+                                                        myDate = "1602";
+                                                        myPublisher = String.Empty;
+                                                        myImage = String.Empty;
+                                                    }
+                                                    bReadImage = true;
+                                                }
+                                                break;
+                                            case XmlNodeType.Text:
+                                                // Console.WriteLine(xmlreader.Value);
+                                                if (bReadName)
+                                                {
+                                                    myName = xmlreader.Value.Trim();
+                                                    bReadName = false;
+                                                    iParamsFound++;
+                                                }
+                                                if (bReadDate)
+                                                {
+                                                    myDate = xmlreader.Value.Trim();
+                                                    bReadDate = false;
+                                                    iParamsFound++;
+                                                }
+                                                if (bReadPublisher)
+                                                {
+                                                    myPublisher = xmlreader.Value.Trim();
+                                                    bReadPublisher = false;
+                                                    iParamsFound++;
+                                                }
+                                                if (bReadImage)
+                                                {
+                                                    myImage = xmlreader.Value.Trim();
+                                                    bReadImage = false;
+                                                    iParamsFound++;
+                                                }
+                                                if (4 == iParamsFound)
+                                                {
+                                                    iParamsFound = 0;
+                                                    lsGames.Add(myName);
+                                                    lsGamesInfo.Add(new ClAnyGame(myName, myDate, myImage, myPublisher));
+                                                    myName = String.Empty;
+                                                    myDate = "1602";
+                                                    myPublisher = String.Empty;
+                                                    myImage = String.Empty;
+                                                }
+                                                break;
+                                            case XmlNodeType.EndElement:
+                                                //
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                        int romfound = 0;
+                        int romnotfound = 0;
+                        String sList = String.Empty;
+
+                        DriveInfo di = (DriveInfo)cbDriveList.SelectedItem;
+                        String sRootDir = di.Name;
+
+                        foreach (FileInfo fi in inDirfileList)
+                        {
+                            if (fi.Extension == sExt)
+                            {
+                                int iN = 1;
+                                int len = fi.Name.LastIndexOf(fi.Extension);
+                                if (fi.Name.IndexOf("(") > -1)
+                                {
+                                    len = fi.Name.IndexOf("(");
+                                }
+                                if ((fi.Name.IndexOf("[") > -1) && (fi.Name.IndexOf("[") < len))
+                                {
+                                    len = fi.Name.IndexOf("[");
+                                }
+                                String sNameFull = fi.Name.Substring(0, len).Replace("_", " ");
+                                if (sNameFull.Length > 1)
+                                {
+                                    sNameFull = sNameFull.Substring(0, 1).ToUpper() + sNameFull.Substring(1);
+                                }
+                                sNameFull = sNameFull.Trim();
+                                String sName = Regex.Replace(sNameFull, @"[^0-9a-zA-Z ]+", "");
+                                sName = Regex.Replace(sName, @" +", " ");
+                                sName = sName.Trim();
+
+                                String sNewDir = iGameIndex.ToString();
+                                if (Directory.Exists(sDirGames + "\\" + sNewDir))
+                                {
+                                    iGameIndex++;
+                                    while (Directory.Exists(sDirGames + "\\" + iGameIndex.ToString()))
+                                    {
+                                        iGameIndex++;
+                                    }
+                                    sNewDir = sDirGames + "\\" + iGameIndex.ToString();
+                                }
+                                else
+                                {
+                                    sNewDir = sDirGames + "\\" + iGameIndex.ToString();
+                                }
+                                iGameIndex++;
+
+                                bool bDefImage = false;
+                                int toto = -1;
+                                int indexlist = 0;
+                                List<ClPaireIndexString> lsPairIndexName = new List<ClPaireIndexString>();
+                                foreach (String s in lsGames)
+                                {
+                                    toto = s.ToLower().IndexOf(sNameFull.ToLower());
+                                    if (toto > -1)
+                                    {
+                                        lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
+                                    }
+                                    indexlist++;
+                                }
+                                if (lsPairIndexName.Count > 0)
+                                {
+                                    toto = 0;
+                                    indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
+                                    if (lsPairIndexName.Count > 1)
+                                    {
+                                        // here make a choice
+                                        foreach (ClPaireIndexString cpis in lsPairIndexName)
+                                        {
+                                            //tbLog.AppendText(cpis.Name + " for " + sNameFull + Environment.NewLine);
+                                            String sNewName = cpis.Name;
+                                            int iLen = -1;
+                                            if (sNewName.IndexOf("(") > -1)
+                                            {
+                                                iLen = fi.Name.IndexOf("(");
+                                            }
+                                            if ((sNewName.IndexOf("[") > -1) && (sNewName.IndexOf("[") < iLen))
+                                            {
+                                                iLen = sNewName.IndexOf("[");
+                                            }
+                                            if (iLen > -1)
+                                            {
+                                                sNewName = sNewName.Substring(0, iLen);
+                                            }
+                                            if (sNewName == sNameFull)
+                                            {
+                                                indexlist = cpis.Index;
+                                                // instead of the first, pick the first found with the same name, which is supposedly more accurate
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // nothing found, search again
+                                    int toto2 = -1;
+                                    String sNameFullModded = Regex.Replace(sNameFull, @"[^0-9a-zA-Z ]+", " ");
+                                    sNameFullModded = Regex.Replace(sNameFullModded, @" +", " ").Trim();
+                                    String[] saTokensName = sNameFullModded.Split(' ');
+                                    Dictionary<String, int> dcMatchingNumber = new Dictionary<String, int>();
+                                    int iMaxMatch = 0;
+                                    foreach (String s in saTokensName)
+                                    {
+                                        String sTrimmed = s.Trim();
+                                        if (sTrimmed.Length > 0)
+                                        {
+                                            if (sTrimmed.Length == 1)
+                                            {
+                                                if (sNameFullModded.StartsWith(s + " "))
+                                                {
+                                                    sTrimmed = sTrimmed + " ";
                                                 }
                                                 else
+                                                if (sNameFullModded.EndsWith(" " + s))
                                                 {
-                                                    dcMatchingNumber[ss]++;
-                                                    if (iMaxMatch < dcMatchingNumber[ss])
+                                                    sTrimmed = " " + sTrimmed;
+                                                }
+                                            }
+                                            foreach (String ss in lsGames)
+                                            {
+                                                toto2 = ss.ToLower().IndexOf(sTrimmed.ToLower());
+                                                if (toto2 > -1)
+                                                {
+                                                    if (!dcMatchingNumber.ContainsKey(ss))
                                                     {
-                                                        iMaxMatch = dcMatchingNumber[ss];
+                                                        dcMatchingNumber.Add(ss, 1);
+                                                        if (iMaxMatch < 1)
+                                                        {
+                                                            iMaxMatch = 1;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        dcMatchingNumber[ss]++;
+                                                        if (iMaxMatch < dcMatchingNumber[ss])
+                                                        {
+                                                            iMaxMatch = dcMatchingNumber[ss];
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    List<String> lsMatch = new List<string>();
+                                    if (iMaxMatch > 1)
+                                    {
+                                        if (saTokensName.Length == iMaxMatch)
+                                        {
+                                            // matching
+                                            foreach (KeyValuePair<String, int> pair in dcMatchingNumber)
+                                            {
+                                                if (pair.Value == iMaxMatch)
+                                                {
+                                                    lsMatch.Add(pair.Key);
+                                                }
+                                            }
+                                            indexlist = 0;
+                                            foreach (String s in lsGames)
+                                            {
+                                                toto = lsMatch.IndexOf(s);
+                                                if (toto > -1)
+                                                {
+                                                    lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
+                                                }
+                                                indexlist++;
+                                            }
+                                            if (lsPairIndexName.Count > 0)
+                                            {
+                                                toto = 0;
+                                                indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // matching
+                                            foreach (KeyValuePair<String, int> pair in dcMatchingNumber)
+                                            {
+                                                if (pair.Value == iMaxMatch)
+                                                {
+                                                    lsMatch.Add(pair.Key);
+                                                }
+                                            }
+                                            indexlist = 0;
+                                            foreach (String s in lsGames)
+                                            {
+                                                toto = lsMatch.IndexOf(s);
+                                                if (toto > -1)
+                                                {
+                                                    lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
+                                                }
+                                                indexlist++;
+                                            }
+                                            if (lsPairIndexName.Count > 0)
+                                            {
+                                                toto = 0;
+                                                indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
+                                            }
+                                        }
+                                    }
                                 }
-                                List<String> lsMatch = new List<string>();
-                                if (iMaxMatch > 1)
+                                if (toto > -1)
                                 {
-                                    if (saTokensName.Length == iMaxMatch)
-                                    {
-                                        // matching
-                                        foreach (KeyValuePair<String, int> pair in dcMatchingNumber)
-                                        {
-                                            if (pair.Value == iMaxMatch)
-                                            {
-                                                lsMatch.Add(pair.Key);
-                                            }
-                                        }
-                                        indexlist = 0;
-                                        foreach (String s in lsGames)
-                                        {
-                                            toto = lsMatch.IndexOf(s);
-                                            if (toto > -1)
-                                            {
-                                                lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
-                                            }
-                                            indexlist++;
-                                        }
-                                        if (lsPairIndexName.Count > 0)
-                                        {
-                                            toto = 0;
-                                            indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // matching
-                                        foreach (KeyValuePair<String, int> pair in dcMatchingNumber)
-                                        {
-                                            if (pair.Value == iMaxMatch)
-                                            {
-                                                lsMatch.Add(pair.Key);
-                                            }
-                                        }
-                                        indexlist = 0;
-                                        foreach (String s in lsGames)
-                                        {
-                                            toto = lsMatch.IndexOf(s);
-                                            if (toto > -1)
-                                            {
-                                                lsPairIndexName.Add(new ClPaireIndexString(s, indexlist));
-                                            }
-                                            indexlist++;
-                                        }
-                                        if (lsPairIndexName.Count > 0)
-                                        {
-                                            toto = 0;
-                                            indexlist = lsPairIndexName[0].Index; // the first in the list (may be false)
-                                        }
-                                    }
+                                    //tbLog.AppendText(lsGames[indexlist] + " for " + sNameFull + Environment.NewLine);
+                                    romfound++;
                                 }
-                            }
-                            if (toto > -1)
-                            {
-                                //tbLog.AppendText(lsGames[indexlist] + " for " + sNameFull + Environment.NewLine);
-                                romfound++;
-                            }
-                            else
-                            {
-                                tbLog.AppendText("---------------not found for " + sNameFull + Environment.NewLine);
-                                romnotfound++;
-                            }
-                            Directory.CreateDirectory(sNewDir);
-                            // retroarch launch
-                            switch(m_coreType)
-                            {
-                                case CoreType.DrasticType:
-                                    // drastic launch
-                                    using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launch.sh"))
-                                    {
-                                        sw.Write("#!/bin/sh" + "\n");
-                                        sw.Write("source \"/var/volatile/bleemsync.cfg\"" + "\n");
-                                        sw.Write("source \"/var/volatile/launchtmp/launcher.cfg\"" + "\n");
-                                        sw.Write("cd \"/media/bleemsync/etc/bleemsync/SUP/launchers/psc_drastic\"" + "\n");
-                                        sw.Write("chmod + x \"drastic\"" + "\n");
-                                        sw.Write("echo \"launch_StockUI\" > \"/tmp/launchfilecommand\"" + "\n");
-                                        sw.Write("LD_PRELOAD=./drastic_sdl_remap.so ./drastic \"$pb_rom\" > $runtime_log_path/drastic.log 2>&1" + "\n");
-                                    }
-                                    break;
-                                default: // case CoreType.RetroArchType:
-                                    using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launch.sh"))
-                                    {
-                                        sw.Write("#!/bin/sh" + "\n");
-                                        sw.Write("echo \"launch_retroarch_directload\" > \"/tmp/launchfilecommand\"" + "\n");
-                                    }
-                                    break;
-                            }
-                            using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launcher.cfg"))
-                            {
-                                sw.Write("launcher_filename=\"" + sName + "\"" + "\n");
+                                else
+                                {
+                                    tbLog.AppendText("---------------not found for " + sNameFull + Environment.NewLine);
+                                    romnotfound++;
+                                }
+                                Directory.CreateDirectory(sNewDir);
+                                // retroarch launch
+                                switch (m_coreType)
+                                {
+                                    case CoreType.DrasticType:
+                                        // drastic launch
+                                        using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launch.sh"))
+                                        {
+                                            sw.Write("#!/bin/sh" + "\n\n");
+                                            sw.Write("echo 2 > /data/power/disable" + "\n");
+                                            sw.Write("cd \"/media/bleemsync/etc/bleemsync/SUP/launchers/psc_drastic\"" + "\n");
+                                            sw.Write("chmod + x \"drastic\"" + "\n");
+                                            sw.Write("echo \"launch_StockUI\" > \"/tmp/launchfilecommand\"" + "\n");
+                                            sw.Write("LD_PRELOAD=./drastic_sdl_remap.so ./drastic \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" > $runtime_log_path/drastic.log 2>&1" + "\n");
+                                            sw.Write("echo 0 > /data/power/disable" + "\n");
+                                        }
+                                        break;
+                                    default: // case CoreType.RetroArchType:
+                                        using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launch.sh"))
+                                        {
+                                            sw.Write("#!/bin/sh" + "\n\n");
+                                            sw.Write("echo 2 > /data/power/disable" + "\n");
+                                            sw.Write("mkdir -p \"/tmp/ra_cache\"" + "\n");
+                                            sw.Write("chmod +x /media/bleemsync/opt/retroarch/retroarch" + "\n");
+                                            sw.Write("HOME=/media/bleemsync/opt/retroarch /media/bleemsync/opt/retroarch/retroarch -L\"" + "/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text.Trim() + "\" \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" -v &> \"/media/logs/retroarch.log\"" + "\n");
+                                            sw.Write("rm -rf \"tmp/ra_cache\"" + "\n");
+                                            sw.Write("echo 0 > /data/power/disable" + "\n");
+                                        }
+                                        break;
+                                }
                                 String sRename = sName;
                                 if (toto > -1)
                                 {
@@ -703,102 +696,110 @@ namespace pbPSCBSLauncherGenerator
                                         sRename = sRename.Substring(0, iLen);
                                     }
                                 }
-                                sw.Write("launcher_title=\"" + sRename + "\"" + "\n");
+                                String sRegexified = Regex.Replace(sRename.Trim(), @"[^a-zA-Z0-9_\-\s\.]", "");
+                                using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "Game.ini"))
+                                {
+                                    sw.Write("[Game]" + "\n");
+                                    sw.Write("Discs=" + sRegexified.Trim() + "\n");
+                                    sw.Write("Title=" + sRename.Trim() + "\n");
+                                    if (toto > -1)
+                                    {
+                                        sw.Write("Publisher=" + lsGamesInfo[indexlist].Publisher + "\n");
+                                        sw.Write("Developer=" + "\n");
+                                        sw.Write("Players=1" + "\n");
+                                        sw.Write("Year=" + lsGamesInfo[indexlist].Date.Substring(0, 4) + "\n");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("Publisher=" + "TODO" + "\n");
+                                        sw.Write("Developer=" + "\n");
+                                        sw.Write("Players=1" + "\n");
+                                        sw.Write("Year=" + "1990" + "\n");
+                                    }
+                                    sw.Write("Automation=0" + "\n");
+                                    sw.Write("Highres=0" + "\n");
+                                    sw.Write("Imagetype=0" + "\n");
+                                    sw.Write("Memcard=SONY" + "\n");
+                                }
                                 if (toto > -1)
                                 {
-                                    sw.Write("launcher_publisher=\"" + lsGamesInfo[indexlist].Publisher + "\"" + "\n");
-                                    sw.Write("launcher_year=\"" + lsGamesInfo[indexlist].Date.Substring(0, 4) + "\"" + "\n");
-                                }
-                                else
-                                {
-                                    sw.Write("launcher_publisher=\"TODO\"" + "\n");
-                                    sw.Write("launcher_year=\"1990\"" + "\n");
-                                }
-                                if (m_coreType == CoreType.RetroArchType)
-                                {
-                                    sw.Write("pb_core=\"/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text + "\"" + "\n");
-                                }
-                                sw.Write("pb_rom=\"/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\"" + "\n");
-                                sw.Write("pb_parentfolder=\"" + nudParentFolderIdForScan.Value.ToString() + "\"" + "\n");
-                            }
-                            if (toto > -1)
-                            {
-                                if (File.Exists(sGlFolder + lsGamesInfo[indexlist].Image))
-                                {
-                                    using (Bitmap bm = new Bitmap(sGlFolder + "\\" + lsGamesInfo[indexlist].Image))
+                                    if (File.Exists(sGlFolder + lsGamesInfo[indexlist].Image))
                                     {
-                                        int width = 226;
-                                        int height = 226;
-                                        int orig_width = bm.Width;
-                                        int orig_height = bm.Height;
-                                        float orig_ratio = 0;
-                                        Bitmap bm1;
-                                        if (orig_height != 0)
+                                        using (Bitmap bm = new Bitmap(sGlFolder + "\\" + lsGamesInfo[indexlist].Image))
                                         {
-                                            orig_ratio = (float)(orig_width) / (float)(orig_height);
-                                        }
-                                        else
-                                        {
-                                            orig_ratio = 0;
-                                        }
-                                        if ((orig_ratio != 0) && (height != 0) && (orig_ratio != (width / height)))
-                                        {
-                                            float current_ratio = (float)(width) / (float)(height);
-                                            int width1 = (int)(height * orig_ratio);
-                                            int height1 = (int)(width / orig_ratio);
-                                            Bitmap bm0;
-                                            bm1 = new Bitmap(width, height);
-                                            Graphics gp = Graphics.FromImage(bm1);
-                                            gp.Clear(Color.Transparent);
-                                            int x = 0;
-                                            int y = 0;
-                                            if (width1 < width)
+                                            int width = 226;
+                                            int height = 226;
+                                            int orig_width = bm.Width;
+                                            int orig_height = bm.Height;
+                                            float orig_ratio = 0;
+                                            Bitmap bm1;
+                                            if (orig_height != 0)
                                             {
-                                                bm0 = new Bitmap(ClPbHelper.ResizeImage(bm, width1, height));
-                                                x = ((width - width1) / 2);
+                                                orig_ratio = (float)(orig_width) / (float)(orig_height);
                                             }
                                             else
                                             {
-                                                bm0 = new Bitmap(ClPbHelper.ResizeImage(bm, width, height1));
-                                                y = ((height - height1) / 2);
+                                                orig_ratio = 0;
                                             }
-                                            gp.DrawImage(bm0, x, y);
+                                            if ((orig_ratio != 0) && (height != 0) && (orig_ratio != (width / height)))
+                                            {
+                                                float current_ratio = (float)(width) / (float)(height);
+                                                int width1 = (int)(height * orig_ratio);
+                                                int height1 = (int)(width / orig_ratio);
+                                                Bitmap bm0;
+                                                bm1 = new Bitmap(width, height);
+                                                Graphics gp = Graphics.FromImage(bm1);
+                                                gp.Clear(Color.Transparent);
+                                                int x = 0;
+                                                int y = 0;
+                                                if (width1 < width)
+                                                {
+                                                    bm0 = new Bitmap(ClPbHelper.ResizeImage(bm, width1, height));
+                                                    x = ((width - width1) / 2);
+                                                }
+                                                else
+                                                {
+                                                    bm0 = new Bitmap(ClPbHelper.ResizeImage(bm, width, height1));
+                                                    y = ((height - height1) / 2);
+                                                }
+                                                gp.DrawImage(bm0, x, y);
+                                            }
+                                            else
+                                            {
+                                                bm1 = new Bitmap(ClPbHelper.ResizeImage(bm, width, height));
+                                            }
+                                            bm1.Save(sNewDir + "\\" + sRegexified + ".png", ImageFormat.Png);
+                                            sList += " \"" + sNewDir + "\\" + sRegexified + ".png" + "\"";
                                         }
-                                        else
-                                        {
-                                            bm1 = new Bitmap(ClPbHelper.ResizeImage(bm, width, height));
-                                        }
-                                        bm1.Save(sNewDir + "\\" + sName + ".png", ImageFormat.Png);
-                                        sList += " \"" + sNewDir + "\\" + sName + ".png" + "\"";
+                                    }
+                                    else
+                                    {
+                                        bDefImage = true;
                                     }
                                 }
                                 else
                                 {
                                     bDefImage = true;
                                 }
-                            }
-                            else
-                            {
-                                bDefImage = true;
-                            }
-                            if (bDefImage)
-                            {
-                                using (Bitmap bm = new Bitmap(226, 226))
+                                if (bDefImage)
                                 {
-                                    Graphics gp = Graphics.FromImage(bm);
-                                    gp.Clear(knownColors[index]);
-                                    index = (index + 1) % knownColors.Length;
-                                    bm.Save(sNewDir + "\\" + sName + ".png", ImageFormat.Png);
-                                    sList += " \"" + sNewDir + "\\" + sName + ".png" + "\"";
+                                    using (Bitmap bm = new Bitmap(226, 226))
+                                    {
+                                        Graphics gp = Graphics.FromImage(bm);
+                                        gp.Clear(knownColors[index]);
+                                        index = (index + 1) % knownColors.Length;
+                                        bm.Save(sNewDir + "\\" + sRegexified + ".png", ImageFormat.Png);
+                                        sList += " \"" + sNewDir + "\\" + sRegexified + ".png" + "\"";
+                                    }
                                 }
                             }
                         }
-                    }
-                    tbLog.AppendText("found: " + romfound.ToString() + ", notfound: " + romnotfound.ToString() + Environment.NewLine);
-                    if (sList != String.Empty)
-                    {
-                        MyProcessHelper pPngQuant = new MyProcessHelper(Application.StartupPath + "\\pngquant\\pngquant.exe", sList + " --force --ext .png --verbose");
-                        pPngQuant.DoIt();
+                        tbLog.AppendText("found: " + romfound.ToString() + ", notfound: " + romnotfound.ToString() + Environment.NewLine);
+                        if (sList != String.Empty)
+                        {
+                            MyProcessHelper pPngQuant = new MyProcessHelper(Application.StartupPath + "\\pngquant\\pngquant.exe", sList + " --force --ext .png --verbose");
+                            pPngQuant.DoIt();
+                        }
                     }
                 }
             }
@@ -822,13 +823,11 @@ namespace pbPSCBSLauncherGenerator
                 {
                     lbLauncherDirNotFound.Visible = false;
                     btExploreLauncherFolder.Enabled = true;
-                    btCreateFolder.Enabled = true;
                 }
                 else
                 {
                     lbLauncherDirNotFound.Visible = true;
                     btExploreLauncherFolder.Enabled = false;
-                    btCreateFolder.Enabled = false;
                 }
                 String sPathCore = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch\\cores";
                 tbCoreDir.Text = sPathCore;
@@ -841,6 +840,18 @@ namespace pbPSCBSLauncherGenerator
                 {
                     lbCoreDirNotFound.Visible = true;
                     btExploreCoreFolder.Enabled = false;
+                }
+                String sPathGames = di.Name + "games";
+                tbGamesDir.Text = sPathGames;
+                if (Directory.Exists(sPathGames))
+                {
+                    lbGamesDirNotFound.Visible = false;
+                    btExploreGamesFolder.Enabled = true;
+                }
+                else
+                {
+                    lbGamesDirNotFound.Visible = true;
+                    btExploreGamesFolder.Enabled = false;
                 }
 
                 String sRomPath = String.Empty;
@@ -869,6 +880,7 @@ namespace pbPSCBSLauncherGenerator
                 lbDriveInfo.Text = "---";
                 tbLauncherDir.Text = "";
                 tbCoreDir.Text = "";
+                tbGamesDir.Text = "";
             }
         }
 
@@ -952,137 +964,9 @@ namespace pbPSCBSLauncherGenerator
                 }
                 tbExtension.Text = clqs.Extension;
                 tbGlFolder.Text = clqs.Gamelistfolder;
-                nudParentFolderIdForScan.Value = (decimal)(clqs.Targetfolderid);
             }
         }
-
-        private void btCreateFolder_Click(object sender, EventArgs e)
-        {
-            if (cbDriveList.SelectedIndex > -1)
-            {
-                String sDirLauncher = tbLauncherDir.Text;
-                if (Directory.Exists(sDirLauncher))
-                {
-                    String sTitle = tbNameForFolder.Text.Trim();
-                    if(String.IsNullOrEmpty(sTitle))
-                    {
-                        sTitle = "default";
-                    }
-                    String sName = Regex.Replace(sTitle, @"[^0-9a-zA-Z ]+", "");
-                    sName = Regex.Replace(sName, @" +", " ");
-                    sName = sName.Trim();
-                    String sNewDir = "folder_" + sName;
-                    int iN = 1;
-                    if (Directory.Exists(sDirLauncher + "\\" + sNewDir))
-                    {
-                        while (Directory.Exists(sDirLauncher + "\\" + sNewDir + "_" + iN.ToString()))
-                        {
-                            iN++;
-                        }
-                        sNewDir = sDirLauncher + "\\" + sNewDir + "_" + iN.ToString();
-                    }
-                    else
-                    {
-                        sNewDir = sDirLauncher + "\\" + sNewDir;
-                    }
-                    String sPublisher = tbPublisherForFolder.Text.Trim();
-                    int iYear = (int)(nudYearForFolder.Value);
-                    String sDbFile = tbDBFileForFolder.Text.Trim();
-                    if (String.IsNullOrEmpty(sDbFile))
-                    {
-                        sDbFile = "regional.db";
-                    }
-                    int iParentId = (int)(nudParentIdForFolder.Value);
-                    int iFolderId = (int)(nudFolderIdForFolder.Value);
-
-                    Directory.CreateDirectory(sNewDir);
-                    using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launch.sh"))
-                    {
-                        sw.Write("#!/bin/sh" + "\n");
-                        sw.Write("source \"/var/volatile/launchtmp/launcher.cfg\"" + "\n");
-                        sw.Write("echo -e \"pb_currentdbfile=\\\"$pb_dbfile\\\"\\npb_currentidfolder=$pb_idfolder\" > \"/var/volatile/pb_folder.flag\"" + "\n");
-                    }
-                    using (StreamWriter sw = new StreamWriter(sNewDir + "\\" + "launcher.cfg"))
-                    {
-                        sw.Write("launcher_filename=\"" + sName + "\"" + "\n");
-                        sw.Write("launcher_title=\"" + sTitle + "\"" + "\n");
-                        sw.Write("launcher_publisher=\"" + sPublisher + "\"" + "\n");
-                        sw.Write("launcher_year=\"" + iYear.ToString() + "\"" + "\n");
-                        sw.Write("launcher_sort=\"" + "no" + "\"" + "\n"); // add option maybe TODO ?
-                        sw.Write("pb_dbfile=\"" + sDbFile + "\"" + "\n");
-                        sw.Write("pb_idfolder=\"" + iFolderId.ToString() + "\"" + "\n");
-                        sw.Write("pb_parentfolder=\"" + iParentId.ToString() + "\"" + "\n");
-                    }
-                    if(null == pbImgForFolder.Image)
-                    {
-                        Random rand = new Random();
-                        int index = rand.Next(knownColors.Length);
-                        using (Bitmap bm = new Bitmap(226, 226))
-                        {
-                            Graphics gp = Graphics.FromImage(bm);
-                            gp.Clear(knownColors[index]);
-                            bm.Save(sNewDir + "\\" + sName + ".png", ImageFormat.Png);
-                            String sParam = " \"" + sNewDir + "\\" + sName + ".png" + "\"";
-                            MyProcessHelper pPngQuant = new MyProcessHelper(Application.StartupPath + "\\pngquant\\pngquant.exe", sParam + " --force --ext .png --verbose");
-                            pPngQuant.DoIt();
-                        }
-                    }
-                    else
-                    {
-                        String sImgName = sNewDir + "\\" + sName + ".png";
-                        pbImgForFolder.Image.Save(sImgName, ImageFormat.Png);
-                        String sParam = " \"" + sImgName + "\"";
-                        MyProcessHelper pPngQuant = new MyProcessHelper(Application.StartupPath + "\\pngquant\\pngquant.exe", sParam + " --force --ext .png --verbose");
-                        pPngQuant.DoIt();
-                    }
-                }
-            }
-        }
-
-        private void pbImgForFolder_DragDrop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                String[] sFileList = (String[])e.Data.GetData(DataFormats.FileDrop, false);
-                if (sFileList.Length == 1)
-                {
-                    String sExt = Path.GetExtension(sFileList[0]).ToLower();
-                    List<String> lsAcceptedExt = new List<string>() { ".png", ".jpg", ".jpeg", ".bmp" };
-                    if (lsAcceptedExt.IndexOf(sExt) > -1)
-                    {
-                        using (Bitmap bmPicture = new Bitmap(sFileList[0]))
-                        {
-                            pbImgForFolder.Image = ClPbHelper.ResizeImage((Image)(new Bitmap(bmPicture)), 226, 226);
-                        }
-                    }
-                    else
-                    {
-                        // MessageBox.Show("Extension " + sExt + " not accepted. Dragdrop a file with extension png, bmp, jpg or jpeg.");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Only one file for drag&drop operation please.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void pbImgForFolder_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Copy;
-        }
-
-        private void pbImgForFolder_Click(object sender, EventArgs e)
-        {
-            // Click -> open browser
-            // shift-click -> clear
-        }
-
+        
         private void tbRomsDir_Leave(object sender, EventArgs e)
         {
             tbRomsDir.Text = tbRomsDir.Text.Trim();
@@ -1102,39 +986,26 @@ namespace pbPSCBSLauncherGenerator
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.iFolderIdForFolder = (int)(nudFolderIdForFolder.Value);
-            Properties.Settings.Default.iParentIdForFolder = (int)(nudParentIdForFolder.Value);
-            Properties.Settings.Default.iYearForFolder = (int)(nudYearForFolder.Value);
-            Properties.Settings.Default.sDbFileForFolder = tbDBFileForFolder.Text.Trim();
-            Properties.Settings.Default.sNameForFolder = tbNameForFolder.Text.Trim();
-            Properties.Settings.Default.sPublisherForFolder = tbPublisherForFolder.Text.Trim();
             Properties.Settings.Default.sRomFolder = tbRomsDir.Text.Trim();
             Properties.Settings.Default.Save();
         }
 
-        private void pbImgForFolder_DoubleClick(object sender, EventArgs e)
+        private void btExploreGamesFolder_Click(object sender, EventArgs e)
         {
-            if (Control.ModifierKeys == Keys.Shift)
+            if (cbDriveList.SelectedIndex > -1)
             {
-                if(DialogResult.Yes == MessageBox.Show("Are you sure you want to clear the picture ?", "Clear picture", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                String sPath = tbGamesDir.Text;
+                if (Directory.Exists(sPath))
                 {
-                    pbImgForFolder.Image = null;
-                }
-            }
-            else
-            if (DialogResult.OK == ofdLoadImg.ShowDialog())
-            {
-                String sFileName = ofdLoadImg.FileName;
-                try
-                {
-                    using (Bitmap bmPicture = new Bitmap(sFileName))
+                    try
                     {
-                        pbImgForFolder.Image = ClPbHelper.ResizeImage((Image)(new Bitmap(bmPicture)), 226, 226);
+                        MyProcessHelper explo = new MyProcessHelper("explorer.exe", sPath);
+                        explo.DoIt();
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
