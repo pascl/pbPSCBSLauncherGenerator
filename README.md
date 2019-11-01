@@ -1,16 +1,16 @@
 # pbPSCBSLauncherGenerator
 
-A little software to use with *PSC*lassic and modded *B*leem*S*ync1.1 which can generate launcher files automatically by scanning folders on your USB drive.
+A little software to use with *PSC*lassic (to use in conjonction with BleemSync1.2 and pbPscReAlpha1.6) which can generate files automatically by scanning folders on your USB drive.
 
 Download Link: https://github.com/pascl/pbPSCBSLauncherGenerator/releases
 
-Last version: 0.31
+Last version: 0.4
 
-![Preview](https://i.imgur.com/ImZaOce.png)
+![Preview](https://i.imgur.com/PWkIGUH.png)
 
 ## First
-* Download the modded BleemSync1.1 files *and have a look at the readme*: https://github.com/pascl/BleemSync_Mods
-* Download pbPSCReAlpha 1.3 (or more) to split database in several files: https://github.com/pascl/pbPSCReAlpha/releases
+* No need any file modifications using BleemSync1.2
+* Download pbPSCReAlpha 1.6 (or more) to generate database file after using pbPscBsLauncherGenerator: https://github.com/pascl/pbPSCReAlpha/releases
 * In order to have pictures and correct information when scanning folders, you need to download gamelists for retro consoles.
   * https://github.com/recalbox/recalbox-gamelists
   * Or https://github.com/pascl/recalbox-gamelists
@@ -19,28 +19,16 @@ Last version: 0.31
 * You can edit retroarch_params.xml to add a quick setting shortcut in the combobox in the top-right corner, or edit path to search the game info and pictures elsewhere.
   
 ## Need to know
-* You have to know that newly-created rom-launchers (or folders) don't overwrite if there is an existing one with the same name.
-* If it already exists, the newly-created directory in your explorer will be suffixed '_X' (with X a number, ascending at each scan if you don't remove the old ones).
-
-For example, if you scan twice the same folder, you'll have finally each rom twice on screen.
+* This tool creates new folders in the Games folder with all needed files. If you scan twice the same folder, you'll have finally each rom twice in folders.
+* It doesn't move the roms. Roms stay where they are.
+* After using it, you need pbPscReAlpha to regenerate the database.
 
 ## Create rom launchers
 * Select your drive.
 * Select your rom folder on the drive.
 * Select the scan settings with the quick settings combobox, then edit the settings for your convenience.
 * Click on Scan Folder. The scan includes the subfolders.
-* At the bottom-right of the window, you can see the count of found roms and not found roms. The scanning is not perfect, may find a wrong game, or don't find at all. If you don't have the gamelist folder for a console, all won't be found, and launchers will be created with default information.
-
-## Create a folder
-* At the bottom-left of the window, you can create folders.
-* Edit name, publisher, year (this 3 information will be on screen).
-* Edit the DB file (pbPSCReAlpha permits to split the database).
-* Edit the folder ID and the parent ID (*see the readme of BleemSync_Mods for special cases*)
-* Double-click in the black-bordered square to add a picture. Shift-double-clicked to clear the picture.
-* Then click on Create.
-
-## Video
-https://www.youtube.com/watch?v=LEKqin5gYuA
+* At the bottom-right of the window, you can see the count of found roms and not found roms. The scanning is not perfect, may find a wrong game, or don't find at all. If you don't have the gamelist folder for a console, all won't be found, and files will be created with default information.
 
 ## File list in release pack
 * pbPSCBSLauncherGenerator.exe
