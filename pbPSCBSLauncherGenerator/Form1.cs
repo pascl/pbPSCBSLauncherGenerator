@@ -653,7 +653,7 @@ namespace pbPSCBSLauncherGenerator
                                             sw.Write("cd \"/media/bleemsync/etc/bleemsync/SUP/launchers/psc_drastic\"" + "\n");
                                             sw.Write("chmod + x \"drastic\"" + "\n");
                                             sw.Write("echo \"launch_StockUI\" > \"/tmp/launchfilecommand\"" + "\n");
-                                            sw.Write("LD_PRELOAD=./drastic_sdl_remap.so ./drastic \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" > $runtime_log_path/drastic.log 2>&1" + "\n");
+                                            sw.Write("LD_PRELOAD=./drastic_sdl_remap.so ./drastic \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" > /media/logs/drastic.log 2>&1" + "\n");
                                             sw.Write("echo 0 > /data/power/disable" + "\n");
                                         }
                                         break;
