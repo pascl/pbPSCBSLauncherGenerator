@@ -4,9 +4,9 @@ A little software to use with *PSC*lassic (to use in conjonction with BleemSync1
 
 Download Link: https://github.com/pascl/pbPSCBSLauncherGenerator/releases
 
-Last version: 0.4
+Last version: 0.41
 
-![Preview](https://i.imgur.com/PWkIGUH.png)
+![Preview](https://i.imgur.com/ImZaOce.png)
 
 ## First
 * No need any file modifications using BleemSync1.2
