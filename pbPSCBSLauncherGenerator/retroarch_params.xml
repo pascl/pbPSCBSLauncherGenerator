@@ -5,6 +5,7 @@
   <config core="gambatte_libretro.so" extension=".gb" gamelistfolder="./gamelists/gb" targetfolderid="110">gb</config>
   <config core="gambatte_libretro.so" extension=".gbc" gamelistfolder="./gamelists/gbc" targetfolderid="110">gbc</config>
   <config core="mgba_libretro.so" extension=".gba" gamelistfolder="./gamelists/gba" targetfolderid="110">gba</config>
+  <config core="mupen64plus_next_libretro.so" extension=".z64" gamelistfolder="./gamelists/n64" targetfolderid="110">n64</config>
   <config core="genesis_plus_gx_libretro.so" extension=".sms" gamelistfolder="./gamelists/mastersystem" targetfolderid="110">sms</config>
   <config core="genesis_plus_gx_libretro.so" extension=".gen" gamelistfolder="./gamelists/megadrive" targetfolderid="110">smd</config>
   <config core="genesis_plus_gx_libretro.so" extension=".32x" gamelistfolder="./gamelists/sega32x" targetfolderid="110">32x</config>

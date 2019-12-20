@@ -664,7 +664,7 @@ namespace pbPSCBSLauncherGenerator
                                             sw.Write("echo 2 > /data/power/disable" + "\n");
                                             sw.Write("mkdir -p \"/tmp/ra_cache\"" + "\n");
                                             sw.Write("chmod +x /media/bleemsync/opt/retroarch/retroarch" + "\n");
-                                            sw.Write("HOME=/media/bleemsync/opt/retroarch /media/bleemsync/opt/retroarch/retroarch -L\"" + "/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text.Trim() + "\" \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" -v &> \"/media/logs/retroarch.log\"" + "\n");
+                                            sw.Write("HOME=/media/bleemsync/opt/retroarch /media/bleemsync/opt/retroarch/retroarch --config \""+ "/media/" + tbRACfgPath.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" +"retroarch.cfg\" -L\"" + "/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text.Trim() + "\" \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" -v &> \"/media/logs/retroarch.log\"" + "\n");
                                             sw.Write("rm -rf \"tmp/ra_cache\"" + "\n");
                                             sw.Write("echo 0 > /data/power/disable" + "\n");
                                         }
@@ -854,13 +854,25 @@ namespace pbPSCBSLauncherGenerator
                 tbCoreDir.Text = sPathCore;
                 if (Directory.Exists(sPathCore))
                 {
+                    tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch";
                     lbCoreDirNotFound.Visible = false;
                     btExploreCoreFolder.Enabled = true;
                 }
                 else
                 {
-                    lbCoreDirNotFound.Visible = true;
-                    btExploreCoreFolder.Enabled = false;
+                    sPathCore = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch\\cores";
+                    tbCoreDir.Text = sPathCore;
+                    if (Directory.Exists(sPathCore))
+                    {
+                        tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch";
+                        lbCoreDirNotFound.Visible = false;
+                        btExploreCoreFolder.Enabled = true;
+                    }
+                    else
+                    {
+                        lbCoreDirNotFound.Visible = true;
+                        btExploreCoreFolder.Enabled = false;
+                    }
                 }
                 String sPathGames = di.Name + "games";
                 tbGamesDir.Text = sPathGames;
@@ -902,6 +914,8 @@ namespace pbPSCBSLauncherGenerator
                 tbLauncherDir.Text = "";
                 tbCoreDir.Text = "";
                 tbGamesDir.Text = "";
+
+                tbRACfgPath.Text = "";
             }
         }
 

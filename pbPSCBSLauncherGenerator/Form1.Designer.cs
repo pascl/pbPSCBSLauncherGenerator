@@ -39,6 +39,10 @@
             this.lbDriveInfo = new System.Windows.Forms.Label();
             this.btRefreshDriveList = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lbGamesDirNotFound = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btExploreGamesFolder = new System.Windows.Forms.Button();
+            this.tbGamesDir = new System.Windows.Forms.TextBox();
             this.lbCoreDirNotFound = new System.Windows.Forms.Label();
             this.lbLauncherDirNotFound = new System.Windows.Forms.Label();
             this.btExploreCoreFolder = new System.Windows.Forms.Button();
@@ -61,10 +65,7 @@
             this.cbQuickSettings = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.ofdLoadImg = new System.Windows.Forms.OpenFileDialog();
-            this.lbGamesDirNotFound = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.btExploreGamesFolder = new System.Windows.Forms.Button();
-            this.tbGamesDir = new System.Windows.Forms.TextBox();
+            this.tbRACfgPath = new System.Windows.Forms.TextBox();
             this.gbDrive.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -177,6 +178,46 @@
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Folders";
+            // 
+            // lbGamesDirNotFound
+            // 
+            this.lbGamesDirNotFound.Image = global::pbPSCBSLauncherGenerator.Properties.Resources.exclamation;
+            this.lbGamesDirNotFound.Location = new System.Drawing.Point(338, 80);
+            this.lbGamesDirNotFound.Name = "lbGamesDirNotFound";
+            this.lbGamesDirNotFound.Size = new System.Drawing.Size(18, 18);
+            this.lbGamesDirNotFound.TabIndex = 14;
+            this.lbGamesDirNotFound.Visible = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 62);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(72, 13);
+            this.label10.TabIndex = 13;
+            this.label10.Text = "Games folder:";
+            // 
+            // btExploreGamesFolder
+            // 
+            this.btExploreGamesFolder.Enabled = false;
+            this.btExploreGamesFolder.Image = global::pbPSCBSLauncherGenerator.Properties.Resources.folder;
+            this.btExploreGamesFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btExploreGamesFolder.Location = new System.Drawing.Point(362, 76);
+            this.btExploreGamesFolder.Name = "btExploreGamesFolder";
+            this.btExploreGamesFolder.Size = new System.Drawing.Size(75, 23);
+            this.btExploreGamesFolder.TabIndex = 12;
+            this.btExploreGamesFolder.Text = "Open";
+            this.btExploreGamesFolder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btExploreGamesFolder.UseVisualStyleBackColor = true;
+            this.btExploreGamesFolder.Click += new System.EventHandler(this.btExploreGamesFolder_Click);
+            // 
+            // tbGamesDir
+            // 
+            this.tbGamesDir.Enabled = false;
+            this.tbGamesDir.Location = new System.Drawing.Point(9, 78);
+            this.tbGamesDir.Name = "tbGamesDir";
+            this.tbGamesDir.Size = new System.Drawing.Size(323, 20);
+            this.tbGamesDir.TabIndex = 11;
             // 
             // lbCoreDirNotFound
             // 
@@ -404,51 +445,21 @@
             this.ofdLoadImg.ShowHelp = true;
             this.ofdLoadImg.Title = "Load picture";
             // 
-            // lbGamesDirNotFound
+            // tbRACfgPath
             // 
-            this.lbGamesDirNotFound.Image = global::pbPSCBSLauncherGenerator.Properties.Resources.exclamation;
-            this.lbGamesDirNotFound.Location = new System.Drawing.Point(338, 80);
-            this.lbGamesDirNotFound.Name = "lbGamesDirNotFound";
-            this.lbGamesDirNotFound.Size = new System.Drawing.Size(18, 18);
-            this.lbGamesDirNotFound.TabIndex = 14;
-            this.lbGamesDirNotFound.Visible = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 62);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(72, 13);
-            this.label10.TabIndex = 13;
-            this.label10.Text = "Games folder:";
-            // 
-            // btExploreGamesFolder
-            // 
-            this.btExploreGamesFolder.Enabled = false;
-            this.btExploreGamesFolder.Image = global::pbPSCBSLauncherGenerator.Properties.Resources.folder;
-            this.btExploreGamesFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btExploreGamesFolder.Location = new System.Drawing.Point(362, 76);
-            this.btExploreGamesFolder.Name = "btExploreGamesFolder";
-            this.btExploreGamesFolder.Size = new System.Drawing.Size(75, 23);
-            this.btExploreGamesFolder.TabIndex = 12;
-            this.btExploreGamesFolder.Text = "Open";
-            this.btExploreGamesFolder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btExploreGamesFolder.UseVisualStyleBackColor = true;
-            this.btExploreGamesFolder.Click += new System.EventHandler(this.btExploreGamesFolder_Click);
-            // 
-            // tbGamesDir
-            // 
-            this.tbGamesDir.Enabled = false;
-            this.tbGamesDir.Location = new System.Drawing.Point(9, 78);
-            this.tbGamesDir.Name = "tbGamesDir";
-            this.tbGamesDir.Size = new System.Drawing.Size(323, 20);
-            this.tbGamesDir.TabIndex = 11;
+            this.tbRACfgPath.Enabled = false;
+            this.tbRACfgPath.Location = new System.Drawing.Point(566, 214);
+            this.tbRACfgPath.Name = "tbRACfgPath";
+            this.tbRACfgPath.Size = new System.Drawing.Size(194, 20);
+            this.tbRACfgPath.TabIndex = 23;
+            this.tbRACfgPath.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(769, 463);
+            this.Controls.Add(this.tbRACfgPath);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -513,6 +524,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btExploreGamesFolder;
         private System.Windows.Forms.TextBox tbGamesDir;
+        private System.Windows.Forms.TextBox tbRACfgPath;
     }
 }
 
