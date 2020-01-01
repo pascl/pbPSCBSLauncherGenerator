@@ -66,6 +66,9 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.ofdLoadImg = new System.Windows.Forms.OpenFileDialog();
             this.tbRACfgPath = new System.Windows.Forms.TextBox();
+            this.rbSelectAlphaYes = new System.Windows.Forms.RadioButton();
+            this.rbSelectAlphaNo = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
             this.gbDrive.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -294,6 +297,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.rbSelectAlphaNo);
+            this.groupBox2.Controls.Add(this.rbSelectAlphaYes);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
@@ -304,7 +310,7 @@
             this.groupBox2.Controls.Add(this.tbExtension);
             this.groupBox2.Location = new System.Drawing.Point(464, 83);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(296, 125);
+            this.groupBox2.Size = new System.Drawing.Size(296, 148);
             this.groupBox2.TabIndex = 19;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Scan Settings";
@@ -448,11 +454,42 @@
             // tbRACfgPath
             // 
             this.tbRACfgPath.Enabled = false;
-            this.tbRACfgPath.Location = new System.Drawing.Point(566, 214);
+            this.tbRACfgPath.Location = new System.Drawing.Point(374, 57);
             this.tbRACfgPath.Name = "tbRACfgPath";
             this.tbRACfgPath.Size = new System.Drawing.Size(194, 20);
             this.tbRACfgPath.TabIndex = 23;
             this.tbRACfgPath.Visible = false;
+            // 
+            // rbSelectAlphaYes
+            // 
+            this.rbSelectAlphaYes.AutoSize = true;
+            this.rbSelectAlphaYes.Location = new System.Drawing.Point(184, 118);
+            this.rbSelectAlphaYes.Name = "rbSelectAlphaYes";
+            this.rbSelectAlphaYes.Size = new System.Drawing.Size(43, 17);
+            this.rbSelectAlphaYes.TabIndex = 15;
+            this.rbSelectAlphaYes.Text = "Yes";
+            this.rbSelectAlphaYes.UseVisualStyleBackColor = true;
+            // 
+            // rbSelectAlphaNo
+            // 
+            this.rbSelectAlphaNo.AutoSize = true;
+            this.rbSelectAlphaNo.Checked = true;
+            this.rbSelectAlphaNo.Location = new System.Drawing.Point(251, 118);
+            this.rbSelectAlphaNo.Name = "rbSelectAlphaNo";
+            this.rbSelectAlphaNo.Size = new System.Drawing.Size(39, 17);
+            this.rbSelectAlphaNo.TabIndex = 16;
+            this.rbSelectAlphaNo.TabStop = true;
+            this.rbSelectAlphaNo.Text = "No";
+            this.rbSelectAlphaNo.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 120);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(107, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Add tag as Alphatitle:";
             // 
             // Form1
             // 
@@ -525,6 +562,9 @@
         private System.Windows.Forms.Button btExploreGamesFolder;
         private System.Windows.Forms.TextBox tbGamesDir;
         private System.Windows.Forms.TextBox tbRACfgPath;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.RadioButton rbSelectAlphaNo;
+        private System.Windows.Forms.RadioButton rbSelectAlphaYes;
     }
 }
 

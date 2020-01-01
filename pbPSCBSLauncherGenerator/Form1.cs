@@ -170,6 +170,16 @@ namespace pbPSCBSLauncherGenerator
             List<ClQuickSettings> lsqs = new List<ClQuickSettings>();
             
             tbRomsDir.Text = Properties.Settings.Default.sRomFolder.Trim();
+            if(Properties.Settings.Default.bAddTagForAlphaTitle)
+            {
+                rbSelectAlphaYes.Checked = true;
+                rbSelectAlphaNo.Checked = false;
+            }
+            else
+            {
+                rbSelectAlphaNo.Checked = true;
+                rbSelectAlphaYes.Checked = false;
+            }
 
             try
             {
@@ -721,6 +731,10 @@ namespace pbPSCBSLauncherGenerator
                                         sw.Write("Players=1" + "\n");
                                         sw.Write("Year=" + "1904" + "\n");
                                     }
+                                    if((rbSelectAlphaYes.Checked == true) && (!String.IsNullOrEmpty(tbTag.Text.Trim())))
+                                    {
+                                        sw.Write("AlphaTitle=" + tbTag.Text.Trim() + " : " + sRename.Trim() + "\n");
+                                    }
                                     sw.Write("Automation=0" + "\n");
                                     sw.Write("Highres=0" + "\n");
                                     sw.Write("Imagetype=0" + "\n");
@@ -836,76 +850,88 @@ namespace pbPSCBSLauncherGenerator
             if(cbDriveList.SelectedIndex > -1)
             {
                 DriveInfo di = (DriveInfo)cbDriveList.SelectedItem;
-                lbDriveInfo.Text = di.VolumeLabel + " (" + di.Name + ") " + ClPbHelper.FormatBytes(di.AvailableFreeSpace) + " free / " + ClPbHelper.FormatBytes(di.TotalSize);
+                if (di.IsReady)
+                {
+                    lbDriveInfo.Text = di.VolumeLabel + " (" + di.Name + ") " + ClPbHelper.FormatBytes(di.AvailableFreeSpace) + " free / " + ClPbHelper.FormatBytes(di.TotalSize);
 
-                String sPathLauncher = di.Name + "bleemsync\\etc\\bleemsync\\SUP\\launchers";
-                tbLauncherDir.Text = sPathLauncher;
-                if(Directory.Exists(sPathLauncher))
-                {
-                    lbLauncherDirNotFound.Visible = false;
-                    btExploreLauncherFolder.Enabled = true;
-                }
-                else
-                {
-                    lbLauncherDirNotFound.Visible = true;
-                    btExploreLauncherFolder.Enabled = false;
-                }
-                String sPathCore = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch\\cores";
-                tbCoreDir.Text = sPathCore;
-                if (Directory.Exists(sPathCore))
-                {
-                    tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch";
-                    lbCoreDirNotFound.Visible = false;
-                    btExploreCoreFolder.Enabled = true;
-                }
-                else
-                {
-                    sPathCore = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch\\cores";
+                    String sPathLauncher = di.Name + "bleemsync\\etc\\bleemsync\\SUP\\launchers";
+                    tbLauncherDir.Text = sPathLauncher;
+                    if (Directory.Exists(sPathLauncher))
+                    {
+                        lbLauncherDirNotFound.Visible = false;
+                        btExploreLauncherFolder.Enabled = true;
+                    }
+                    else
+                    {
+                        lbLauncherDirNotFound.Visible = true;
+                        btExploreLauncherFolder.Enabled = false;
+                    }
+                    String sPathCore = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch\\cores";
                     tbCoreDir.Text = sPathCore;
                     if (Directory.Exists(sPathCore))
                     {
-                        tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch";
+                        tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\.config\\retroarch";
                         lbCoreDirNotFound.Visible = false;
                         btExploreCoreFolder.Enabled = true;
                     }
                     else
                     {
-                        lbCoreDirNotFound.Visible = true;
-                        btExploreCoreFolder.Enabled = false;
+                        sPathCore = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch\\cores";
+                        tbCoreDir.Text = sPathCore;
+                        if (Directory.Exists(sPathCore))
+                        {
+                            tbRACfgPath.Text = di.Name + "bleemsync\\opt\\retroarch\\config\\retroarch";
+                            lbCoreDirNotFound.Visible = false;
+                            btExploreCoreFolder.Enabled = true;
+                        }
+                        else
+                        {
+                            lbCoreDirNotFound.Visible = true;
+                            btExploreCoreFolder.Enabled = false;
+                        }
+                    }
+                    String sPathGames = di.Name + "games";
+                    tbGamesDir.Text = sPathGames;
+                    if (Directory.Exists(sPathGames))
+                    {
+                        lbGamesDirNotFound.Visible = false;
+                        btExploreGamesFolder.Enabled = true;
+                    }
+                    else
+                    {
+                        lbGamesDirNotFound.Visible = true;
+                        btExploreGamesFolder.Enabled = false;
+                    }
+
+                    String sRomPath = String.Empty;
+                    if ((!String.IsNullOrEmpty(tbRomsDir.Text.Trim())) && (1 == tbRomsDir.Text.Trim().IndexOf(":\\")))
+                    {
+                        sRomPath = di.Name + tbRomsDir.Text.Trim().Substring(3);
+                    }
+                    else
+                    {
+                        sRomPath = di.Name;
+                    }
+                    tbRomsDir.Text = sRomPath;
+                    if (Directory.Exists(sRomPath))
+                    {
+                        lbRomsDirNotFound.Visible = false;
+                        btExploreRomFolder.Enabled = true;
+                    }
+                    else
+                    {
+                        lbRomsDirNotFound.Visible = true;
+                        btExploreRomFolder.Enabled = false;
                     }
                 }
-                String sPathGames = di.Name + "games";
-                tbGamesDir.Text = sPathGames;
-                if (Directory.Exists(sPathGames))
-                {
-                    lbGamesDirNotFound.Visible = false;
-                    btExploreGamesFolder.Enabled = true;
-                }
                 else
                 {
-                    lbGamesDirNotFound.Visible = true;
-                    btExploreGamesFolder.Enabled = false;
-                }
+                    lbDriveInfo.Text = "---";
+                    tbLauncherDir.Text = "";
+                    tbCoreDir.Text = "";
+                    tbGamesDir.Text = "";
 
-                String sRomPath = String.Empty;
-                if((!String.IsNullOrEmpty(tbRomsDir.Text.Trim())) && (1 == tbRomsDir.Text.Trim().IndexOf(":\\")))
-                {
-                    sRomPath = di.Name + tbRomsDir.Text.Trim().Substring(3);
-                }
-                else
-                {
-                    sRomPath = di.Name;
-                }
-                tbRomsDir.Text = sRomPath;
-                if (Directory.Exists(sRomPath))
-                {
-                    lbRomsDirNotFound.Visible = false;
-                    btExploreRomFolder.Enabled = true;
-                }
-                else
-                {
-                    lbRomsDirNotFound.Visible = true;
-                    btExploreRomFolder.Enabled = false;
+                    tbRACfgPath.Text = "";
                 }
             }
             else
@@ -1022,6 +1048,7 @@ namespace pbPSCBSLauncherGenerator
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.sRomFolder = tbRomsDir.Text.Trim();
+            Properties.Settings.Default.bAddTagForAlphaTitle = rbSelectAlphaYes.Checked;
             Properties.Settings.Default.Save();
         }
 

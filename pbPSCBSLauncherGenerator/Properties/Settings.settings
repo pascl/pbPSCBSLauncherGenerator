@@ -3,7 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="sRomFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">H:\Roms</Value>
+      <Value Profile="(Default)">H:\roms</Value>
+    </Setting>
+    <Setting Name="bAddTagForAlphaTitle" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

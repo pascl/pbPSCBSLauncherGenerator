@@ -25,13 +25,25 @@ namespace pbPSCBSLauncherGenerator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("H:\\Roms")]
+        [global::System.Configuration.DefaultSettingValueAttribute("H:\\roms")]
         public string sRomFolder {
             get {
                 return ((string)(this["sRomFolder"]));
             }
             set {
                 this["sRomFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bAddTagForAlphaTitle {
+            get {
+                return ((bool)(this["bAddTagForAlphaTitle"]));
+            }
+            set {
+                this["bAddTagForAlphaTitle"] = value;
             }
         }
     }
