@@ -1,12 +1,12 @@
 # pbPSCBSLauncherGenerator
 
-A little software to use with *PSC*lassic (to use in conjonction with BleemSync1.2 and pbPscReAlpha1.6) which can generate files automatically by scanning folders on your USB drive.
+A little software to use with *PSC*lassic (to use in conjonction with BleemSync1.2 and pbPscReAlpha1.6+) which can generate files automatically by scanning folders on your USB drive.
 
 Download Link: https://github.com/pascl/pbPSCBSLauncherGenerator/releases
 
-Last version: 0.41
+Last version: 0.42
 
-![Preview](https://i.imgur.com/ImZaOce.png)
+![Preview](https://i.imgur.com/dp2lz9K.png)
 
 ## First
 * No need any file modifications using BleemSync1.2
@@ -27,6 +27,7 @@ Last version: 0.41
 * Select your drive.
 * Select your rom folder on the drive.
 * Select the scan settings with the quick settings combobox, then edit the settings for your convenience.
+* **NEW 0.42** Choose to add or not the tag to alphatitle (sorting purpose)
 * Click on Scan Folder. The scan includes the subfolders.
 * At the bottom-right of the window, you can see the count of found roms and not found roms. The scanning is not perfect, may find a wrong game, or don't find at all. If you don't have the gamelist folder for a console, all won't be found, and files will be created with default information.
 
