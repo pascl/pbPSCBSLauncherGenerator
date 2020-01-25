@@ -672,6 +672,8 @@ namespace pbPSCBSLauncherGenerator
                                         {
                                             sw.Write("#!/bin/sh" + "\n\n");
                                             sw.Write("echo 2 > /data/power/disable" + "\n");
+                                            sw.Write("source \"/var/volatile/bleemsync.cfg\"" + "\n");
+                                            sw.Write("PATH=\"$PATH:$bleemsync_path/bin\"" + "\n");
                                             sw.Write("mkdir -p \"/tmp/ra_cache\"" + "\n");
                                             sw.Write("chmod +x /media/bleemsync/opt/retroarch/retroarch" + "\n");
                                             sw.Write("HOME=/media/bleemsync/opt/retroarch /media/bleemsync/opt/retroarch/retroarch --config \""+ "/media/" + tbRACfgPath.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" +"retroarch.cfg\" -L\"" + "/media/" + tbCoreDir.Text.Substring(sRootDir.Length).Replace("\\", "/") + "/" + tbCoreFile.Text.Trim() + "\" \"" + "/media/" + fi.FullName.Substring(sRootDir.Length).Replace("\\", "/") + "\" -v &> \"/media/logs/retroarch.log\"" + "\n");
